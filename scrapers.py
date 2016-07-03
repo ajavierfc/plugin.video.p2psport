@@ -241,7 +241,7 @@ def arenavision_schedule():
             for dia,mes,year,hour,minute,sport,competition,evento,canales in eventmatch:
                 import datetime
                 from utils import pytzimp
-                d = pytzimp.timezone(str(pytzimp.timezone('Europe/London'))).localize(datetime.datetime(2000 + int(year), int(mes), int(dia), hour=int(hour), minute=int(minute)))
+                d = pytzimp.timezone(str(pytzimp.timezone('Europe/Madrid'))).localize(datetime.datetime(2000 + int(year), int(mes), int(dia), hour=int(hour), minute=int(minute)))
                 timezona= addon.get_setting('timezone_new')
                 my_location=pytzimp.timezone(pytzimp.all_timezones[int(timezona)])
                 convertido=d.astimezone(my_location)
