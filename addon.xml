@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.p2psport"
 	name="P2P Sport"
-	version="0.1.4"
-	provider-name="natko1412,Extracsaba">
+	version="0.1.5"
+	provider-name="natko1412,Extracsaba (ajavierfc mod)">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.addon.common" version="2.0.0" />
