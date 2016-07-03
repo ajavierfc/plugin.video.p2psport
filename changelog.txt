@@ -3,7 +3,7 @@ P2P Sport by natko1412
 ========================================
 
 v0.1.5 [03-Jul-2016]
-Modifications by ajavierfc to get arenavision work back.
+Modifications by ajavierfc to make arenavision work back.
 
 v0.1.4 [03-Jul-2016]
 Unknown
