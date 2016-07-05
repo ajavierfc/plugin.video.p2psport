@@ -237,7 +237,7 @@ def arenavision_schedule():
     if source:
         match = re.findall('<tr>(.*?)</tr>', source, re.DOTALL)
         for event in match:
-            eventmatch = re.compile('<td[^>]*>(\d+)/(\d+)/(\d+)</td>\n<td[^>]*>(.+?):(.+?) CET</td>\n<td[^>]*>(.+?)</td>\n<td[^>]*>(.+?)</td>\n<td[^>]*>(.+?)</td>\n<td[^>]*>(.+?)</td>', re.DOTALL).findall(event)
+            eventmatch = re.compile('<td[^>]*>(\d+)/(\d+)/(\d+)</td>\n<td[^>]*>(.+?):(.+?)[^C]+CET</td>\n<td[^>]*>(.+?)</td>\n<td[^>]*>(.+?)</td>\n<td[^>]*>(.+?)</td>\n<td[^>]*>(.+?)</td>', re.DOTALL).findall(event)
             for dia,mes,year,hour,minute,sport,competition,evento,canales in eventmatch:
                 import datetime
                 from utils import pytzimp
@@ -249,15 +249,15 @@ def arenavision_schedule():
                 time=convertido.strftime(fmt)
                 time='[COLOR orange]('+str(time)+')[/COLOR] '
 
-                event_name=sport +': '+ competition +' '+ evento
-                event_name=re.sub(r"(\r|\n|\t)", "", event_name).replace("<br />", " ")
+                event_name=sport +': '+ competition +' '+ re.sub('(\r|\n|\t|[^\w\s\d\(\)\-\:\;\&\,\.\/\+])', '', evento.replace('&amp;', '&').replace("<br />", " "))
 
                 channels=re.compile('([\dA-Z]+)', re.DOTALL).findall(canales)
 
-                url = build_url({'mode': 'av_open','channels': channels, 'name':event_name})
+                url = build_url({'mode': 'av_open','channels': channels, 'name': event_name})
                 li = xbmcgui.ListItem(time + event_name,iconImage='http://kodi.altervista.org/wp-content/uploads/2015/07/arenavision.jpg')
                 xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                            listitem=li, isFolder=True)
+
         xbmcplugin.endOfDirectory(addon_handle)
 
 #############################################################################################################################################################3
