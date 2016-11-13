@@ -274,7 +274,7 @@ elif mode[0]=='av_open':
     name=params['name'][0]
     sources=[]
     for i in range(len(channels)):
-        if channels[i][0].isdigit():
+        if channels[i][0].isdigit() or channels[i][0] == 'S' and channels[i][1].isdigit():
             title='AV%s'%channels[i]
             sources+=[title]
         else:

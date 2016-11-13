@@ -227,7 +227,7 @@ def play_arena_sop(url,name):
     xbmc.Player().play(url)
 
 def arenavision_schedule():
-    url='http://arenavision.in/agenda'
+    url='http://arenavision.in/schedule'
     headers = {
         "Cookie" : "beget=begetok; has_js=1;"
     }
@@ -249,11 +249,12 @@ def arenavision_schedule():
                 time=convertido.strftime(fmt)
                 time='[COLOR orange]('+str(time)+')[/COLOR] '
 
-                event_name=sport +': '+ competition +' '+ re.sub('(\r|\n|\t|[^\w\s\d\(\)\-\:\;\&\,\.\/\+])', '', evento.replace('&amp;', '&').replace("<br />", " "))
+                event_name=sport +': '+ competition +' '+ evento;
+                event_name=re.sub('(\r|\n|\t|[^\w\s\d\(\)\-\:\;\&\,\.\/\+])', '', event_name.replace('&amp;', '&').replace("<br />", " "))
 
                 channels=re.compile('([\dA-Z]+)', re.DOTALL).findall(canales)
-
-                url = build_url({'mode': 'av_open','channels': channels, 'name': event_name})
+                #xbmc.log("name: "+ event_name);
+                url = build_url({'mode': 'av_open','channels': channels, 'name': event_name.encode('utf-8')})
                 li = xbmcgui.ListItem(time + event_name,iconImage='http://kodi.altervista.org/wp-content/uploads/2015/07/arenavision.jpg')
                 xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                            listitem=li, isFolder=True)
