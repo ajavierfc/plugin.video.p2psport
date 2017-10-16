@@ -3,7 +3,7 @@
 import re
 import urllib2
 import HTMLParser
-import urllib,urlparse
+import urllib, urlparse
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
@@ -11,6 +11,9 @@ import requests
 from BeautifulSoup import BeautifulSoup as bs
 from utils.webutils import *
 import json
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 try:
@@ -92,19 +95,10 @@ def get_ttv():
     xbmcplugin.endOfDirectory(addon_handle)
 
 def ttv_sport():
-    base_url = 'http://super-pomoyka.us.to/trash/ttv-list/ttv.m3u'
+    base_url = 'http://pomoyka.lib.emergate.net/trash/ttv-list/ttv.sport.player.m3u'
     source = read_url(base_url)
     if source:
-        match= re.compile("#EXTINF:-1,Sky Sports News \(.+?\)\n(.*)").findall(source)
-        if match:
-            name='Sky Sports News'
-            ace=match[0]
-            url='plugin://program.plexus/?mode=1&url=%s&name=%s'%(ace,name.replace(' ','+'))
-            li = xbmcgui.ListItem('%s'%name, iconImage='http://addons.tvaddons.ag/cache/images/bc591d6d5ec442d4ddb43a347a8be6_icon.png')
-            li.setProperty('IsPlayable', 'true')
-            xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
-
-        match= re.compile("#EXTINF:-1,(.+?)\(Спорт\)\n(.*)").findall(source)
+        match= re.compile('#EXTINF:-1,(.+?)\n(.*)').findall(source)
         for titulo,acestream in match:
             name=titulo
             ace=acestream
@@ -113,7 +107,7 @@ def ttv_sport():
                 name = name.replace("(" + categorie +")","")
                 ace=acestream
             url='plugin://program.plexus/?mode=1&url=%s&name=%s'%(ace,name.replace(' ','+'))
-            li = xbmcgui.ListItem('%s'%name, iconImage='http://addons.tvaddons.ag/cache/images/bc591d6d5ec442d4ddb43a347a8be6_icon.png')
+            li = xbmcgui.ListItem('%s'%name, iconImage='https://start.me/favicon/www.torrent-tv.ru')
             li.setProperty('IsPlayable', 'true')
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
     xbmcplugin.endOfDirectory(addon_handle)
@@ -123,15 +117,16 @@ def open_ttv_stream(url,name):
 
 
 def get_ttv_cat(cat,tag):
-	url="http://super-pomoyka.us.to/trash/ttv-list/ttv.m3u"
+	url="http://pomoyka.lib.emergate.net/trash/ttv-list/ttv.m3u"
 	html=read_url(url)
 	dicty=json.loads(tag)
+        dicty = {k.encode('utf-8'): v for k, v in dicty.items()}
 	channels=dicty[cat]
 	for channel in channels:
 		name=channel[0]
 		ace=channel[1]
 		url='plugin://program.plexus/?mode=1&url=%s&name=%s'%(ace,name.replace(' ','+'))
-		li = xbmcgui.ListItem('%s'%name, iconImage='http://addons.tvaddons.ag/cache/images/bc591d6d5ec442d4ddb43a347a8be6_icon.png')
+		li = xbmcgui.ListItem('%s'%name, iconImage='https://start.me/favicon/www.torrent-tv.ru')
 		li.setProperty('IsPlayable', 'true')
 		xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
 	xbmcplugin.endOfDirectory(addon_handle)
@@ -139,7 +134,7 @@ def get_ttv_cat(cat,tag):
 
 def ttv_cats():
 	dict_torrent = {}
-	url="http://super-pomoyka.us.to/trash/ttv-list/ttv.m3u"
+	url="http://pomoyka.lib.emergate.net/trash/ttv-list/ttv.m3u"
 	html_source=read_url(url)
 	match = re.compile('#EXTINF:-1,(.+?)\n(.*)').findall(html_source)
 	for title, acehash in match:
@@ -163,7 +158,7 @@ def ttv_cats():
             				except: pass
 	for cat in dict_torrent.keys():
 		url = build_url({'mode': 'open_ttv_cat','channels':json.dumps(dict_torrent),'cat':cat})
-		li = xbmcgui.ListItem(cat,iconImage='http://addons.tvaddons.ag/cache/images/bc591d6d5ec442d4ddb43a347a8be6_icon.png')
+		li = xbmcgui.ListItem(cat,iconImage='https://start.me/favicon/www.torrent-tv.ru')
 		xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
 				listitem=li, isFolder=True)
 
