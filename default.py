@@ -13,7 +13,6 @@ from utils.webutils import *
 from scrapers import *
 
 
-
 try:
     from addon.common.addon import Addon
 
