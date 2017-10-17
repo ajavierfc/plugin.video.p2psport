@@ -117,82 +117,82 @@ def open_ttv_stream(url,name):
 
 
 def get_ttv_cat(cat,tag):
-	url="http://pomoyka.lib.emergate.net/trash/ttv-list/ttv.m3u"
-	html=read_url(url)
-	dicty=json.loads(tag)
-        dicty = {k.encode('utf-8'): v for k, v in dicty.items()}
-	channels=dicty[cat]
-	for channel in channels:
-		name=channel[0]
-		ace=channel[1]
-		url='plugin://program.plexus/?mode=1&url=%s&name=%s'%(ace,name.replace(' ','+'))
-		li = xbmcgui.ListItem('%s'%name, iconImage='https://start.me/favicon/www.torrent-tv.ru')
-		li.setProperty('IsPlayable', 'true')
-		xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
-	xbmcplugin.endOfDirectory(addon_handle)
+    url="http://pomoyka.lib.emergate.net/trash/ttv-list/ttv.m3u"
+    html=read_url(url)
+    dicty=json.loads(tag)
+    dicty = {k.encode('utf-8'): v for k, v in dicty.items()}
+    channels=dicty[cat]
+    for channel in channels:
+        name=channel[0]
+        ace=channel[1]
+        url='plugin://program.plexus/?mode=1&url=%s&name=%s'%(ace,name.replace(' ','+'))
+        li = xbmcgui.ListItem('%s'%name, iconImage='https://start.me/favicon/www.torrent-tv.ru')
+        li.setProperty('IsPlayable', 'true')
+        xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
+    xbmcplugin.endOfDirectory(addon_handle)
 
 
 def ttv_cats():
-	dict_torrent = {}
-	url="http://pomoyka.lib.emergate.net/trash/ttv-list/ttv.m3u"
-	html_source=read_url(url)
-	match = re.compile('#EXTINF:-1,(.+?)\n(.*)').findall(html_source)
-	for title, acehash in match:
-    		channel_name = re.compile('(.+?) \(').findall(title)
-    		match_cat = re.compile('\((.+?)\)').findall(title)
-    		for i in xrange(0,len(match_cat)):
-    			if match_cat[i] == "Для взрослых" :
-    				pass
-    			elif match_cat[i] == "Ночной канал" :
+    dict_torrent = {}
+    url="http://pomoyka.lib.emergate.net/trash/ttv-list/ttv.m3u"
+    html_source=read_url(url)
+    match = re.compile('#EXTINF:-1,(.+?)\n(.*)').findall(html_source)
+    for title, acehash in match:
+            channel_name = re.compile('(.+?) \(').findall(title)
+            match_cat = re.compile('\((.+?)\)').findall(title)
+            for i in xrange(0,len(match_cat)):
+                if match_cat[i] == "Для взрослых" :
+                    pass
+                elif match_cat[i] == "Ночной канал" :
                                 pass
-    			else:
-                		categorie = russiandictionary(match_cat[i])
+                else:
+                        categorie = russiandictionary(match_cat[i])
 
-                		if categorie not in dict_torrent.keys():
-                			try:
-            					dict_torrent[categorie] = [(channel_name[0],acehash)]
-            				except: pass
-            			else:
-            				try:
-            					dict_torrent[categorie].append((channel_name[0],acehash))
-            				except: pass
-	for cat in dict_torrent.keys():
-		url = build_url({'mode': 'open_ttv_cat','channels':json.dumps(dict_torrent),'cat':cat})
-		li = xbmcgui.ListItem(cat,iconImage='https://start.me/favicon/www.torrent-tv.ru')
-		xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-				listitem=li, isFolder=True)
+                        if categorie not in dict_torrent.keys():
+                            try:
+                                dict_torrent[categorie] = [(channel_name[0],acehash)]
+                            except: pass
+                        else:
+                            try:
+                                dict_torrent[categorie].append((channel_name[0],acehash))
+                            except: pass
+    for cat in dict_torrent.keys():
+        url = build_url({'mode': 'open_ttv_cat','channels':json.dumps(dict_torrent),'cat':cat})
+        li = xbmcgui.ListItem(cat,iconImage='https://start.me/favicon/www.torrent-tv.ru')
+        xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
+                listitem=li, isFolder=True)
 
 
-	xbmcplugin.endOfDirectory(addon_handle)
+    xbmcplugin.endOfDirectory(addon_handle)
 
 def russiandictionary(string):
-	if string == "Eng": return "English"
-	elif string == "Спорт": return "Sport"
-	elif string == "Новостные": return "News"
-	elif string == "Свадебный": return "Wedding"
-	elif string == "Общие": return "General"
-	elif string == "Познавательные": return "Educational"
-	elif string == "СНГ": return "СIС"
-	elif string == "Мужские": return "Men"
-	elif string == "Ukraine": return "Ukraine"
- 	elif string == "резерв": return "Reserved"
- 	elif string == "Донецк": return "Donetsk"
- 	elif string == "Региональные": return "Regional"
- 	elif string == "Для взрослых": return "Adult"
- 	elif string == "TV21": return string
- 	elif string == "Украина": return "Ukraine"
- 	elif string == "Детские": return "Kids"
- 	elif string == "Фильмы": return "Movies"
- 	elif string == "Ночной канал": return "Night Channels"
- 	elif string == "Европа": return "Europe"
- 	elif string == "укр": return "Ukraine"
- 	elif string == "Музыка": return "Music"
- 	elif string == "Религиозные": return "Religious"
- 	elif string == "Развлекательные": return "Entertainment"
-	elif string == "украина": return "Ukraine"
-	elif string == "Казахстан": return "Kazakstan"
-	elif string=='Екатеринбург': return 'Ekaterinburg'
- 	else: return string
+    if string == "Eng": return "English"
+    elif string == "Спорт": return "Sport"
+    elif string == "Новостные": return "News"
+    elif string == "Свадебный": return "Wedding"
+    elif string == "Общие": return "General"
+    elif string == "Познавательные": return "Educational"
+    elif string == "СНГ": return "СIС"
+    elif string == "Мужские": return "Men"
+    elif string == "Ukraine": return "Ukraine"
+    elif string == "резерв": return "Reserved"
+    elif string == "Донецк": return "Donetsk"
+    elif string == "Региональные": return "Regional"
+    elif string == "Для взрослых": return "Adult"
+    elif string == "TV21": return string
+    elif string == "Украина": return "Ukraine"
+    elif string == "Детские": return "Kids"
+    elif string == "Фильмы": return "Movies"
+    elif string == "Ночной канал": return "Night Channels"
+    elif string == "Европа": return "Europe"
+    elif string == "укр": return "Ukraine"
+    elif string == "Музыка": return "Music"
+    elif string == "Религиозные": return "Religious"
+    elif string == "Развлекательные": return "Entertainment"
+    elif string == "украина": return "Ukraine"
+    elif string == "Казахстан": return "Kazakstan"
+    elif string=='Екатеринбург': return 'Ekaterinburg'
+    else: return string
 
 #############################################################################################################################################################3
 #############################################################################################################################################################3
@@ -206,9 +206,9 @@ def play_arena(url,name):
     html = requests.get(url,headers=headers).text
     match = re.compile('this.loadPlayer\("(.+?)"').findall(html)[0]
     try:
-    	url='plugin://program.plexus/?mode=1&url=acestream://%s&name=%s'%(match,urllib.quote_plus(name))
+        url='plugin://program.plexus/?mode=1&url=acestream://%s&name=%s'%(match,urllib.quote_plus(name))
     except:
-    	url='plugin://program.plexus/?mode=1&url=acestream://%s&name=%s'%(match,name.replace(' ','+'))
+        url='plugin://program.plexus/?mode=1&url=acestream://%s&name=%s'%(match,name.replace(' ','+'))
 
     xbmc.Player().play(url)
 def play_arena_sop(url,name):
@@ -222,39 +222,46 @@ def play_arena_sop(url,name):
     xbmc.Player().play(url)
 
 def arenavision_schedule():
-    url='http://arenavision.in/schedule'
+    url='http://arenavision.in/iguide'
     headers = {
         "Cookie" : "beget=begetok; has_js=1;"
     }
+
     try:
         source = requests.get(url,headers=headers).text
-    except: source=""
+    except:
+        source=""
+
     if source:
-        match = re.findall('<tr>(.*?)</tr>', source, re.DOTALL)
-        for event in match:
-            eventmatch = re.compile('<td[^>]*>(\d+)/(\d+)/(\d+)</td>\n<td[^>]*>(.+?):(.+?)[^C]+CET</td>\n<td[^>]*>(.+?)</td>\n<td[^>]*>(.+?)</td>\n<td[^>]*>(.+?)</td>\n<td[^>]*>(.+?)</td>', re.DOTALL).findall(event)
-            for dia,mes,year,hour,minute,sport,competition,evento,canales in eventmatch:
+        rows = re.findall('(<tr>(<td[^>]*>[^<]*<\/td>[^<]*){6}<\/tr>)', source.replace("<br />", ""), re.DOTALL)
+        for row in rows:
+            date, hour, sport, tournament, phase, channels = re.findall('<td[^>]*>([^<]*)</td>', row[0])
+
+            try:
+                d, m, y, h, n = re.findall('(?:(\d{2})\/(\d{2})\/(\d{4})(\d{2})\:(\d{2}))', date + hour)[0]
                 import datetime
                 from utils import pytzimp
-                d = pytzimp.timezone(str(pytzimp.timezone('Europe/Madrid'))).localize(datetime.datetime(2000 + int(year), int(mes), int(dia), hour=int(hour), minute=int(minute)))
+                dt = pytzimp.timezone(str(pytzimp.timezone('Europe/Madrid'))).localize(datetime.datetime(2000 + int(y), int(m), int(d), hour=int(h), minute=int(n)))
                 timezona= addon.get_setting('timezone_new')
                 my_location=pytzimp.timezone(pytzimp.all_timezones[int(timezona)])
-                convertido=d.astimezone(my_location)
-                fmt = "%d-%m-%y %H:%M"
+                convertido=dt.astimezone(my_location)
+                fmt = "%d-%m %H:%M"
                 time=convertido.strftime(fmt)
                 time='[COLOR orange]('+str(time)+')[/COLOR] '
+            except:
+                time=date +" "+ hour
 
-                event_name=sport +': '+ competition +' '+ evento;
-                event_name=re.sub('(\r|\n|\t|[^\w\s\d\(\)\-\:\;\&\,\.\/\+])', '', event_name.replace('&amp;', '&').replace("<br />", " "))
+            event_name = sport +": "+ tournament +" "+ phase
+            event_name = re.sub('(\r|\n|\t|[^\w\s\d\(\)\-\:\;\&\,\.\/\+])', '', event_name.replace('&amp;', '&'))
 
-                channels=re.compile('([\dA-Z]+)', re.DOTALL).findall(canales)
-                #xbmc.log("name: "+ event_name);
-                url = build_url({'mode': 'av_open','channels': channels, 'name': event_name.encode('utf-8')})
-                li = xbmcgui.ListItem(time + event_name,iconImage='http://kodi.altervista.org/wp-content/uploads/2015/07/arenavision.jpg')
-                xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-                           listitem=li, isFolder=True)
+            channels = re.compile('([\dA-Z]+)', re.DOTALL).findall(channels)
 
-        xbmcplugin.endOfDirectory(addon_handle)
+            #xbmc.log("name: "+ event_name)
+            url = build_url({'mode': 'av_open','channels': channels, 'name': event_name.encode('utf-8')})
+            li = xbmcgui.ListItem(time +" "+ event_name,iconImage='https://pbs.twimg.com/profile_images/788852870993027072/giwZj-BU.jpg')
+            xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
+
+    xbmcplugin.endOfDirectory(addon_handle)
 
 #############################################################################################################################################################3
 #############################################################################################################################################################3
@@ -265,6 +272,7 @@ def livefootballol():
     url='http://www.livefootballol.com/live-football-streaming.html'
     html=get_page_source(url)
     soup=bs(html)
+    #
     #items=re.compile('<li>\s*<div><img src=".+?" alt=".+?"/> (.+?) [(.+?)] <a href="(.+?)">(.+?)</a></div>\s*</li>')
     #time,league,link,name
     daty=soup.findAll('h3')
@@ -611,27 +619,27 @@ def resolve_roja(url,name):
                 resolve_roja(url,name)
                 return
             except:
-            	pass
+                pass
         elif 'iframe' in source:
 
-        	soup=bs(source)
-        	urls=soup.findAll('iframe')
-        	for urly in urls:
-        		try:
-        			cc=urly['id']
-        		except:
-        			cc=''
-        		if 'free' in urly['src'] or 'timeanddate' in urly['src']:
-        			pass
-        		else:
-        			if (cc=='refresh' or cc=='ifi'):
-        				url=url+ '/'+ urly['src']
-        				resolve_roja(url,name)
-        				return
-	        		elif 'ttv.net' in urly['src']:
-	        			url=urly['src']
-	            		resolve_roja(url,name)
-	            		return
+            soup=bs(source)
+            urls=soup.findAll('iframe')
+            for urly in urls:
+                try:
+                    cc=urly['id']
+                except:
+                    cc=''
+                if 'free' in urly['src'] or 'timeanddate' in urly['src']:
+                    pass
+                else:
+                    if (cc=='refresh' or cc=='ifi'):
+                        url=url+ '/'+ urly['src']
+                        resolve_roja(url,name)
+                        return
+                    elif 'ttv.net' in urly['src']:
+                        url=urly['src']
+                        resolve_roja(url,name)
+                        return
 
 
         matchsop = re.compile('sop://(.+?)"').findall(source)
@@ -644,7 +652,7 @@ def resolve_roja(url,name):
                 url='plugin://program.plexus/?mode=1&url=%s&name=%s'%(match[0],urllib.quote_plus(name))
                 xbmc.Player().play(url)
             else:
-            	xbmcgui.Dialog().ok('No stream','No stream available!')
+                xbmcgui.Dialog().ok('No stream','No stream available!')
     elif "sop://" in url:
         url='plugin://program.plexus/?mode=2&url=sop://%s&name=%s'%(url,name.replace(' ','+'))
         xbmc.Player().play(url)
@@ -657,41 +665,41 @@ def resolve_roja(url,name):
 #############################################################################################################################################################3
 #############################################################################################################################################################3
 def one_ttv_cats():
-	cats=['General','News','Entertainment','Baby','Movies','Sport','Cognitive','Music','Men','Regional','Religious','x','HD Channels','In Moderation']
-	for i in range(len(cats)):
-		if cats[i]!='x':
-			tag='tcon_%s'%(i+1)
-			title='%s'%(cats[i])
-			url = build_url({'mode': 'open_1ttv_cat','tag':tag,'name':title})
-			li = xbmcgui.ListItem(title,iconImage='http://s3.hostingkartinok.com/uploads/images/2013/06/6e4452212490ac0a66e358c97707ef77.png')
-			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-				listitem=li, isFolder=True)
-	xbmcplugin.endOfDirectory(addon_handle)
+    cats=['General','News','Entertainment','Baby','Movies','Sport','Cognitive','Music','Men','Regional','Religious','x','HD Channels','In Moderation']
+    for i in range(len(cats)):
+        if cats[i]!='x':
+            tag='tcon_%s'%(i+1)
+            title='%s'%(cats[i])
+            url = build_url({'mode': 'open_1ttv_cat','tag':tag,'name':title})
+            li = xbmcgui.ListItem(title,iconImage='http://s3.hostingkartinok.com/uploads/images/2013/06/6e4452212490ac0a66e358c97707ef77.png')
+            xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
+                listitem=li, isFolder=True)
+    xbmcplugin.endOfDirectory(addon_handle)
 
 def open_1ttv_cat(tag,name):
-	url='http://1torrent.tv/channels.php'
-	html=read_url(url)
-	soup=bs(html)
-	table=soup.find('div',{'id': tag})
-	divs=table.findAll('div',{'class':'elem_small_channel_white_wrapper'})
-	for item in divs:
-		x=re.compile('<img src="(.+?)"').findall(str(item))[0]
-		thumb='http://1torrent.tv'+ x
-		channel=item.findAll('div',{'class':'cell'})[1].find('a').getText()
-		link='http://1torrent.tv'+ item.findAll('div',{'class':'cell'})[1].find('a')['href']
+    url='http://1torrent.tv/channels.php'
+    html=read_url(url)
+    soup=bs(html)
+    table=soup.find('div',{'id': tag})
+    divs=table.findAll('div',{'class':'elem_small_channel_white_wrapper'})
+    for item in divs:
+        x=re.compile('<img src="(.+?)"').findall(str(item))[0]
+        thumb='http://1torrent.tv'+ x
+        channel=item.findAll('div',{'class':'cell'})[1].find('a').getText()
+        link='http://1torrent.tv'+ item.findAll('div',{'class':'cell'})[1].find('a')['href']
 
-		url = build_url({'mode': 'open_1ttv_channel','url':link})
-		li = xbmcgui.ListItem(channel,iconImage=thumb)
-		xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-			listitem=li, isFolder=True)
-	xbmcplugin.endOfDirectory(addon_handle)
+        url = build_url({'mode': 'open_1ttv_channel','url':link})
+        li = xbmcgui.ListItem(channel,iconImage=thumb)
+        xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
+            listitem=li, isFolder=True)
+    xbmcplugin.endOfDirectory(addon_handle)
 
 def open_1ttv_channel(url):
-	html=read_url(url)
-	soup=bs(html)
-	name=soup.find('div',{'id':'cur_name'}).getText()
+    html=read_url(url)
+    soup=bs(html)
+    name=soup.find('div',{'id':'cur_name'}).getText()
 
-	play_arena(url,name)
+    play_arena(url,name)
 
 #############################################################################################################################################################3
 #############################################################################################################################################################3
