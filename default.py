@@ -65,7 +65,7 @@ if mode is None:
                                 listitem=li, isFolder=True)
 
     url = build_url({'mode': 'livefooty'})
-    li = xbmcgui.ListItem('Livefootballol.com',iconImage='http://www.livefootballol.com/images/logo.png')
+    li = xbmcgui.ListItem('Livefootballol',iconImage='http://www.livefootballol.me/images/logo.png')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
 
@@ -276,7 +276,7 @@ elif mode[0]=='livefooty':
     livefootballol()
 
 elif mode[0]=='open_livefoot':
-    url='http://www.livefootballol.com'+params['url'][0]
+    url='http://www.livefootballol.me'+params['url'][0]
     name=params['name'][0]
     get_livefoot(url,name)
 
