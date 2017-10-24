@@ -269,7 +269,7 @@ def arenavision_schedule():
 
 
 def livefootballol():
-    url='http://www.livefootballol.com/live-football-streaming.html'
+    url='http://www.livefootballol.me/live-football-streaming.html'
     html=get_page_source(url)
     soup=bs(html)
     #
@@ -279,15 +279,16 @@ def livefootballol():
     lists=soup.findAll('list')
     for i in range(6):
         itel=daty[i]
-        if 'CET' in itel.getText():
+        if 'CEST' in itel.getText():
             date=itel.getText()
             index=date.index(',')+2
             date=date[index:]
             dates=date.split('/')
-            day,month,year=dates[0],dates[1],dates[2].replace('CET','').strip()
-            items=re.compile('<li>\s*<div><img src=".+?" alt=".+?"\s*\/>\s*(.+?)\s*\[(.+?)\]\s*<a\s*href="(.+?)"\s*(?:target="_blank"|)\s*>\s*(.+?)<\/a>').findall(str(lists[i]))
+            day,month,year=dates[0],dates[1],dates[2].replace('CEST','').strip()
+            items=re.compile('<li>(\d{2}:\d{2}) <a href="([^"]+)">([^<]+)</a></li>').findall(str(lists[i]))
             for tem in items:
-                time,league,link,name = tem[0],tem[1],tem[2],tem[3]
+                time,link,name = tem[0],tem[1],tem[2]
+                league=""
                 time=time.split(':')
                 hour,minute=time[0],time[1]
                 import datetime
@@ -367,7 +368,7 @@ def play_livefoot(url,name):
             pass
 
 def livefootF1():
-    url='http://www.livefootballol.com/f1-steaming.html'
+    url='http://www.livefootballol.me/f1-steaming.html'
     html=read_url(url)
     soup=bs(html)
     table=soup.find('table',{'id':'customers'})
