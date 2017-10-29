@@ -241,7 +241,7 @@ def arenavision_schedule():
                 d, m, y, h, n = re.findall('(?:(\d{2})\/(\d{2})\/(\d{4})(\d{2})\:(\d{2}))', date + hour)[0]
                 import datetime
                 from utils import pytzimp
-                dt = pytzimp.timezone(str(pytzimp.timezone('Europe/Madrid'))).localize(datetime.datetime(2000 + int(y), int(m), int(d), hour=int(h), minute=int(n)))
+                dt = pytzimp.timezone(str(pytzimp.timezone('Europe/Madrid'))).localize(datetime.datetime(int(y), int(m), int(d), hour=int(h), minute=int(n)))
                 timezona= addon.get_setting('timezone_new')
                 my_location=pytzimp.timezone(pytzimp.all_timezones[int(timezona)])
                 convertido=dt.astimezone(my_location)
