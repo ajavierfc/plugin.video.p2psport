@@ -214,7 +214,7 @@ elif mode[0]=='av':
                                 listitem=li, isFolder=True)
 
     for i in range(35):
-        url = build_url({'mode': 'av_ace','url':'%.2d'%(i+1), 'name':'Arenavision %.2d'%(i+1)})
+        url = build_url({'mode': 'av_ace','url':'%.1d'%(i+1), 'name':'Arenavision %.2d'%(i+1)})
         li = xbmcgui.ListItem('Arenavision %.2d'%(i+1),iconImage='https://pbs.twimg.com/profile_images/788852870993027072/giwZj-BU.jpg')
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
@@ -258,7 +258,7 @@ elif mode[0]=='av_open':
     sources=[]
     for i in range(len(channels)):
         if channels[i][0].isdigit() or channels[i][0] == 'S' and channels[i][1].isdigit():
-            title='%.2d'%int(channels[i])
+            title='%.1d'%int(channels[i])
             sources+=[title]
         else:
             sources[len(sources) - 1] += ' [%s]' % channels[i]
