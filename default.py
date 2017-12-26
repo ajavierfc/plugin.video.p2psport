@@ -213,9 +213,14 @@ elif mode[0]=='av':
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
 
-    for i in range(35):
-        url = build_url({'mode': 'av_ace','url':'%.2d'%(i+1), 'name':'Arenavision %.2d'%(i+1)})
-        li = xbmcgui.ListItem('Arenavision %.2d'%(i+1),iconImage='https://pbs.twimg.com/profile_images/788852870993027072/giwZj-BU.jpg')
+    # TODO schedule from av index html
+    # mirrors: http:// arenavision.in arenavision2017.tk arenavision2017.ml arenavision2017.ga arenavision2017.cf
+
+    channels = arenavision_channels()
+
+    for channel, name in channels:
+        url = build_url({'mode': 'av_ace','url': channel, 'name': name})
+        li = xbmcgui.ListItem(name, iconImage='https://pbs.twimg.com/profile_images/788852870993027072/giwZj-BU.jpg')
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
 

@@ -221,6 +221,20 @@ def play_arena_sop(url,name):
     url='plugin://program.plexus/?mode=2&url=sop://%s&name=%s'%(match,urllib.quote_plus(name))
     xbmc.Player().play(url)
 
+def arenavision_channels():
+    headers = {
+        "Cookie" : "beget=begetok; has_js=1;"
+    }
+
+    url = "http://arenavision.in/iguide"
+
+    r = requests.get(url, headers=headers)
+    html = r.text
+
+    channels = re.findall('<a[^>]+href...([^/"]+)"[^>]*>(ArenaVision [0-9]+)</a>', html)
+
+    return channels
+
 def arenavision_schedule():
     url='http://arenavision.in/iguide'
     headers = {
