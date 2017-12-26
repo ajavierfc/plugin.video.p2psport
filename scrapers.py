@@ -32,7 +32,6 @@ params=urlparse.parse_qs(sys.argv[2][1:])
 addon = Addon('plugin.video.p2psport', sys.argv)
 AddonPath = addon.get_path()
 
-
 def build_url(query):
     return base_url + '?' + urllib.urlencode(query)
 
@@ -198,12 +197,18 @@ def russiandictionary(string):
 #############################################################################################################################################################3
 #############################################################################################################################################################3
 
-def play_arena(url,name):
-    headers = {
+def arenavision_url(query):
+    # TODO auto find best mirror
+    # mirrors: http:// arenavision.in arenavision2017.tk arenavision2017.ml arenavision2017.ga arenavision2017.cf
+    return "/".join(['http://arenavision.in', query])
+
+def arenavision_headers():
+    return {
         "Cookie" : "beget=begetok; has_js=1;"
     }
 
-    html = requests.get(url,headers=headers).text
+def play_arena(url,name):
+    html = requests.get(url, headers = arenavision_headers()).text
     match = re.compile('this.loadPlayer\("(.+?)"').findall(html)[0]
     try:
         url='plugin://program.plexus/?mode=1&url=acestream://%s&name=%s'%(match,urllib.quote_plus(name))
@@ -211,24 +216,17 @@ def play_arena(url,name):
         url='plugin://program.plexus/?mode=1&url=acestream://%s&name=%s'%(match,name.replace(' ','+'))
 
     xbmc.Player().play(url)
-def play_arena_sop(url,name):
-    headers = {
-        "Cookie" : "beget=begetok; has_js=1;"
-    }
 
-    html = requests.get(url,headers=headers).text
+def play_arena_sop(url,name):
+    html = requests.get(url, headers = arenavision_headers()).text
     match = re.compile('sop://(.+?)"').findall(html)[0]
     url='plugin://program.plexus/?mode=2&url=sop://%s&name=%s'%(match,urllib.quote_plus(name))
     xbmc.Player().play(url)
 
 def arenavision_channels():
-    headers = {
-        "Cookie" : "beget=begetok; has_js=1;"
-    }
+    url = arenavision_url("iguide")
 
-    url = "http://arenavision.in/iguide"
-
-    r = requests.get(url, headers=headers)
+    r = requests.get(url, headers = arenavision_headers())
     html = r.text
 
     channels = re.findall('<a[^>]+href...([^/"]+)"[^>]*>(ArenaVision [0-9]+)</a>', html)
@@ -236,13 +234,9 @@ def arenavision_channels():
     return channels
 
 def arenavision_schedule():
-    url='http://arenavision.in/iguide'
-    headers = {
-        "Cookie" : "beget=begetok; has_js=1;"
-    }
-
+    url = arenavision_url("iguide")
     try:
-        source = requests.get(url,headers=headers).text
+        source = requests.get(url, headers = arenavision_headers()).text
     except:
         source=""
 

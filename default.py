@@ -207,14 +207,12 @@ elif mode[0]=='open_ttv_stream':
     url=params['url'][0]
     name=params['name'][0]
     open_ttv_stream(url,name)
+
 elif mode[0]=='av':
     url = build_url({'mode': 'av_schedule'})
     li = xbmcgui.ListItem('[COLOR orange]Schedule / Agenda[/COLOR]',iconImage='https://pbs.twimg.com/profile_images/788852870993027072/giwZj-BU.jpg')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
-
-    # TODO schedule from av index html
-    # mirrors: http:// arenavision.in arenavision2017.tk arenavision2017.ml arenavision2017.ga arenavision2017.cf
 
     channels = arenavision_channels()
 
@@ -226,9 +224,8 @@ elif mode[0]=='av':
 
     xbmcplugin.endOfDirectory(addon_handle)
 
-
 elif mode[0]=='av_ace':
-    url='http://arenavision.in/'+params['url'][0]
+    url=arenavision_url(params['url'][0])
     name=params['name'][0]
     try:
         play_arena(url,name)
@@ -236,19 +233,21 @@ elif mode[0]=='av_ace':
         play_arena_sop(url,name)
 
 elif mode[0]=='av_sop':
-    url='http://arenavision.in/'+params['url'][0]
+    url=arenavision_url(params['url'][0])
     name=params['name'][0]
     try:
         play_arena_sop(url,name)
     except:
         play_arena(url,name)
+
 elif mode[0]=='av_rand':
-    url='http://arenavision.in/'+params['url'][0]
+    url=arenavision_url(params['url'][0])
     name=params['name'][0]
     try:
         play_arena(url,name)
     except:
         play_arena_sop(url,name)
+
 elif mode[0]=='open_roja_stream':
     url='http://www.rojadirecta.me/'+params['url'][0]
     name=params['name'][0]
@@ -272,7 +271,7 @@ elif mode[0]=='av_open':
 
     if index>-1:
         url=sources[index]
-        url='http://arenavision.in/'+url.lower().split(' ')[0]
+        url=arenavision_url(url.lower().split(' ')[0])
         try: play_arena(url,name)
         except: play_arena_sop(url,name)
 
