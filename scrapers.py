@@ -224,17 +224,17 @@ def play_arena_sop(url,name):
     xbmc.Player().play(url)
 
 def arenavision_channels():
-    url = arenavision_url("iguide")
+    url = arenavision_url("e-guide")
 
     r = requests.get(url, headers = arenavision_headers())
     html = r.text
 
-    channels = re.findall('<a[^>]+href...([^/"]+)"[^>]*>(ArenaVision [0-9]+)</a>', html)
+    channels = re.findall('<a[^>]+href..([^"]+)"[^>]*>(ArenaVision [0-9]+)</a>', html)
 
     return channels
 
 def arenavision_schedule():
-    url = arenavision_url("iguide")
+    url = arenavision_url("e-guide")
     try:
         source = requests.get(url, headers = arenavision_headers()).text
     except:

@@ -225,7 +225,10 @@ elif mode[0]=='av':
     xbmcplugin.endOfDirectory(addon_handle)
 
 elif mode[0]=='av_ace':
-    url=arenavision_url(params['url'][0])
+    if "http" in params['url'][0]:
+        url=params['url'][0]
+    else:
+        url=arenavision_url(params['url'][0])
     name=params['name'][0]
     try:
         play_arena(url,name)
