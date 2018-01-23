@@ -224,12 +224,12 @@ def play_arena_sop(url,name):
     xbmc.Player().play(url)
 
 def arenavision_channels():
-    url = arenavision_url("e-guide")
+    url = arenavision_url("")
 
     r = requests.get(url, headers = arenavision_headers())
     html = r.text
 
-    channels = re.findall('<a[^>]+href..([^"]+)"[^>]*>(ArenaVision [0-9]+)</a>', html)
+    channels = re.findall('<a[^>]+href..\/?([^"]+)"[^>]*>(ArenaVision [0-9]+)</a>', html)
 
     return channels
 
