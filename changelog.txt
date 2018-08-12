@@ -1,6 +1,12 @@
 ========================================
 P2P Sport by natko1412
 ========================================
+v0.1.9
+-fix Torrent TV links
+
+v0.1.8 [17-Oct-2017]
+-fix arenavision
+
 v0.1.7 [16-Oct-2017]
 -fix Torrent TV Sport
 -fix Torrent TV General
