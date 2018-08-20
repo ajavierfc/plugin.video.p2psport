@@ -117,36 +117,36 @@ def open_ttv_stream(url,name):
 
 
 def get_ttv_cat(cat,tag):
-	url="http://91.92.66.82/trash/ttv-list/ttv.m3u"
-	html=read_url(url)
-	dicty=json.loads(tag)
-        dicty = {k.encode('utf-8'): v for k, v in dicty.items()}
-	channels=dicty[cat]
-	for channel in channels:
-		name=channel[0]
-		ace=channel[1]
-		url='plugin://program.plexus/?mode=1&url=%s&name=%s'%(ace,name.replace(' ','+'))
-		li = xbmcgui.ListItem('%s'%name, iconImage='https://start.me/favicon/www.torrent-tv.ru')
-		li.setProperty('IsPlayable', 'true')
-		xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
-	xbmcplugin.endOfDirectory(addon_handle)
+    url="http://91.92.66.82/trash/ttv-list/ttv.m3u"
+    html=read_url(url)
+    dicty=json.loads(tag)
+    dicty = {k.encode('utf-8'): v for k, v in dicty.items()}
+    channels=dicty[cat]
+    for channel in channels:
+        name=channel[0]
+        ace=channel[1]
+        url='plugin://program.plexus/?mode=1&url=%s&name=%s'%(ace,name.replace(' ','+'))
+        li = xbmcgui.ListItem('%s'%name, iconImage='https://start.me/favicon/www.torrent-tv.ru')
+        li.setProperty('IsPlayable', 'true')
+        xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
+    xbmcplugin.endOfDirectory(addon_handle)
 
 
 def ttv_cats():
-	dict_torrent = {}
-	url="http://91.92.66.82/trash/ttv-list/ttv.m3u"
-	html_source=read_url(url)
-	match = re.compile('#EXTINF:-1,(.+?)\n(.*)').findall(html_source)
-	for title, acehash in match:
-		channel_name = re.compile('(.+?) \(').findall(title)
-		match_cat = re.compile('\((.+?)\)').findall(title)
-		for i in xrange(0,len(match_cat)):
-			if match_cat[i] == "Для взрослых" :
-				pass
-			elif match_cat[i] == "Ночной канал" :
-        pass
-      else:
-        categorie = russiandictionary(match_cat[i])
+    dict_torrent = {}
+    url="http://91.92.66.82/trash/ttv-list/ttv.m3u"
+    html_source=read_url(url)
+    match = re.compile('#EXTINF:-1,(.+?)\n(.*)').findall(html_source)
+    for title, acehash in match:
+        channel_name = re.compile('(.+?) \(').findall(title)
+        match_cat = re.compile('\((.+?)\)').findall(title)
+        for i in xrange(0,len(match_cat)):
+            if match_cat[i] == "Для взрослых" :
+                pass
+            elif match_cat[i] == "Ночной канал" :
+                pass
+            else:
+                categorie = russiandictionary(match_cat[i])
 
         if categorie not in dict_torrent.keys():
             try:
