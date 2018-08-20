@@ -46,7 +46,7 @@ if mode is None:
 
 
     url = build_url({'mode': 'av'})
-    li = xbmcgui.ListItem('Arenavision.in',iconImage='http://kodi.altervista.org/wp-content/uploads/2015/07/arenavision.jpg')
+    li = xbmcgui.ListItem('Arenavision.in',iconImage='https://pbs.twimg.com/profile_images/788852870993027072/giwZj-BU.jpg')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
     url = build_url({'mode': 'roja'})
@@ -65,7 +65,7 @@ if mode is None:
                                 listitem=li, isFolder=True)
 
     url = build_url({'mode': 'livefooty'})
-    li = xbmcgui.ListItem('Livefootballol.com',iconImage='http://www.livefootballol.com/images/logo.png')
+    li = xbmcgui.ListItem('Livefootballol',iconImage='http://www.livefootballol.me/images/logo.png')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
 
@@ -207,39 +207,28 @@ elif mode[0]=='open_ttv_stream':
     url=params['url'][0]
     name=params['name'][0]
     open_ttv_stream(url,name)
+
 elif mode[0]=='av':
     url = build_url({'mode': 'av_schedule'})
-    li = xbmcgui.ListItem('[COLOR orange]Schedule / Agenda[/COLOR]',iconImage='http://kodi.altervista.org/wp-content/uploads/2015/07/arenavision.jpg')
+    li = xbmcgui.ListItem('[COLOR orange]Schedule / Agenda[/COLOR]',iconImage='https://pbs.twimg.com/profile_images/788852870993027072/giwZj-BU.jpg')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
 
-    for i in range(10):
-        url = build_url({'mode': 'av_ace','url':'av%s'%(str(i+1)), 'name':'Arenavision %s'%(i+1)})
-        li = xbmcgui.ListItem('Arenavision %s'%(i+1),iconImage='http://kodi.altervista.org/wp-content/uploads/2015/07/arenavision.jpg')
+    channels = arenavision_channels()
+
+    for channel, name in channels:
+        url = build_url({'mode': 'av_ace','url': channel, 'name': name})
+        li = xbmcgui.ListItem(name, iconImage='https://pbs.twimg.com/profile_images/788852870993027072/giwZj-BU.jpg')
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
 
-    for i in range(11,13):
-        url = build_url({'mode': 'av_rand','url':'av%s'%(str(i+1)), 'name':'Arenavision %s'%(i)})
-        li = xbmcgui.ListItem('Arenavision %s'%(i),iconImage='http://kodi.altervista.org/wp-content/uploads/2015/07/arenavision.jpg')
-        xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-                                listitem=li, isFolder=True)
-
-    for i in range(13,23):
-        url = build_url({'mode': 'av_sop','url':'av%s'%(str(i+1)), 'name':'Arenavision %s'%(i)})
-        li = xbmcgui.ListItem('Arenavision %s'%(i),iconImage='http://kodi.altervista.org/wp-content/uploads/2015/07/arenavision.jpg')
-        xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-                                listitem=li, isFolder=True)
-    for i in range(23,25):
-        url = build_url({'mode': 'av_rand','url':'av%s'%(str(i+1)), 'name':'Arenavision %s'%(i)})
-        li = xbmcgui.ListItem('Arenavision %s'%(i),iconImage='http://kodi.altervista.org/wp-content/uploads/2015/07/arenavision.jpg')
-        xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-                                listitem=li, isFolder=True)
     xbmcplugin.endOfDirectory(addon_handle)
 
-
 elif mode[0]=='av_ace':
-    url='http://arenavision.in/'+params['url'][0]
+    if "http" in params['url'][0]:
+        url=params['url'][0]
+    else:
+        url=arenavision_url(params['url'][0])
     name=params['name'][0]
     try:
         play_arena(url,name)
@@ -247,19 +236,21 @@ elif mode[0]=='av_ace':
         play_arena_sop(url,name)
 
 elif mode[0]=='av_sop':
-    url='http://arenavision.in/'+params['url'][0]
+    url=arenavision_url(params['url'][0])
     name=params['name'][0]
     try:
         play_arena_sop(url,name)
     except:
         play_arena(url,name)
+
 elif mode[0]=='av_rand':
-    url='http://arenavision.in/'+params['url'][0]
+    url=arenavision_url(params['url'][0])
     name=params['name'][0]
     try:
         play_arena(url,name)
     except:
         play_arena_sop(url,name)
+
 elif mode[0]=='open_roja_stream':
     url='http://www.rojadirecta.me/'+params['url'][0]
     name=params['name'][0]
@@ -274,7 +265,7 @@ elif mode[0]=='av_open':
     sources=[]
     for i in range(len(channels)):
         if channels[i][0].isdigit() or channels[i][0] == 'S' and channels[i][1].isdigit():
-            title='AV%s'%channels[i]
+            title='%.2d'%int(channels[i])
             sources+=[title]
         else:
             sources[len(sources) - 1] += ' [%s]' % channels[i]
@@ -283,7 +274,7 @@ elif mode[0]=='av_open':
 
     if index>-1:
         url=sources[index]
-        url='http://arenavision.in/'+url.lower().split(' ')[0]
+        url=arenavision_url(url.lower().split(' ')[0])
         try: play_arena(url,name)
         except: play_arena_sop(url,name)
 
@@ -292,7 +283,7 @@ elif mode[0]=='livefooty':
     livefootballol()
 
 elif mode[0]=='open_livefoot':
-    url='http://www.livefootballol.com'+params['url'][0]
+    url='http://www.livefootballol.me'+params['url'][0]
     name=params['name'][0]
     get_livefoot(url,name)
 
