@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 
 import re
@@ -200,7 +201,7 @@ def russiandictionary(string):
 def arenavision_url(query):
     # TODO auto find best mirror
     # mirrors: http:// arenavision.in arenavision2017.tk arenavision2017.ml arenavision2017.ga arenavision2017.cf
-    return "/".join(['http://arenavision.in', query])
+    return "/".join(['http://arenavision.us', query])
 
 def arenavision_headers():
     return {
@@ -234,7 +235,7 @@ def arenavision_channels():
     return channels
 
 def arenavision_schedule():
-    url = arenavision_url("e-guide")
+    url = arenavision_url("guide")
     try:
         source = requests.get(url, headers = arenavision_headers()).text
     except:
