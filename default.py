@@ -102,8 +102,8 @@ if mode is None:
     li = xbmcgui.ListItem('Torrent-tv.ru',iconImage='http://addons.tvaddons.ag/cache/images/bc591d6d5ec442d4ddb43a347a8be6_icon.png')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
-    url = build_url({'mode': 'alfon', 'url':'http://91.92.66.82/trash/ttv-list/allfon.all.player.m3u'})
-    li = xbmcgui.ListItem('Torrent-tv.ru (Sport)',iconImage='https://i.imgur.com/1e3m2sf.png')
+    url = build_url({'mode': 'allfon', 'url':'http://91.92.66.82/trash/ttv-list/allfon.all.player.m3u'})
+    li = xbmcgui.ListItem('Allfon',iconImage='https://i.imgur.com/1e3m2sf.png')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
 
@@ -139,8 +139,8 @@ elif mode[0]=='play_sopc':
 
 elif mode[0]=='ttv_sport':
     ttv_sport()
-elif mode[0]=='alfon':
-    alfon()
+elif mode[0]=='allfon':
+    allfon()
 elif mode[0]=='serbplus':
     serbplus()
 elif mode[0]=='play_serb':

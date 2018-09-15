@@ -112,7 +112,7 @@ def ttv_sport():
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
     xbmcplugin.endOfDirectory(addon_handle)
 
-def alfon():
+def allfon():
     base_url = 'http://91.92.66.82/trash/ttv-list/allfon.all.player.m3u'
     source = read_url(base_url)
     if source:
