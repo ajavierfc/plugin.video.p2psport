@@ -111,8 +111,27 @@ def ttv_sport():
             li.setProperty('IsPlayable', 'true')
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
     xbmcplugin.endOfDirectory(addon_handle)
-def open_ttv_stream(url,name):
 
+def alfon():
+    base_url = 'http://91.92.66.82/trash/ttv-list/allfon.all.player.m3u'
+    source = read_url(base_url)
+    if source:
+        match= re.compile('#EXTINF:-1,(.+?)\n(.*)').findall(source)
+        for titulo,acestream in match:
+            name=titulo
+            ace=acestream
+            clean = re.compile("\((.+?)\)").findall(name)
+            for categorie in clean:
+                name = name.replace("(" + categorie +")","")
+                ace=acestream
+            url='plugin://program.plexus/?mode=1&url=%s&name=%s'%(ace,name.replace(' ','+'))
+            li = xbmcgui.ListItem('%s'%name, iconImage='https://i.imgur.com/1e3m2sf.png')
+            li.setProperty('IsPlayable', 'true')
+            xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
+    xbmcplugin.endOfDirectory(addon_handle)
+
+
+def open_ttv_stream(url,name):
     resolve_roja(url,name)
 
 
