@@ -114,10 +114,11 @@ def ttv_sport():
 
 def allfon():
     base_url = 'http://91.92.66.82/trash/ttv-list/allfon.all.player.m3u'
-    source = read_url(base_url)
-    if source:
+    source = urllib.urlopen(base_url)
+    linedsource = source.readlines()
+    if linedsource:
         content = ""
-        for line in source:
+        for line in linedsource:
             if not re.match('#EXTVLCOPT', line):
                 line = line.rstrip("\n")
                 content = content + '\n' + line
