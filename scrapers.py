@@ -116,7 +116,12 @@ def allfon():
     base_url = 'http://91.92.66.82/trash/ttv-list/allfon.all.player.m3u'
     source = read_url(base_url)
     if source:
-        match = re.compile('#EXTINF:0,(.+?)\n(.*)').findall(source)
+        content = ""
+        for line in source:
+            if not re.match('#EXTVLCOPT', line):
+                line = line.rstrip("\n")
+                content = content + '\n' + line
+        match = re.compile('#EXTINF:0,(.*?)\s\(allfon\)\n(.*)').findall(content)
         for titulo,acestream in match:
             name=titulo
             ace=acestream
