@@ -215,12 +215,12 @@ elif mode[0]=='open_ttv_stream':
     open_ttv_stream(url,name)
 
 elif mode[0]=='av':
-    url = build_url({'mode': 'av_schedule'})
+    guide, channels = arenavision_channels()
+
+    url = build_url({'mode': 'av_schedule', 'guide': guide})
     li = xbmcgui.ListItem('[COLOR orange]Schedule / Agenda[/COLOR]',iconImage='https://pbs.twimg.com/profile_images/788852870993027072/giwZj-BU.jpg')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
-
-    channels = arenavision_channels()
 
     for channel, name in channels:
         url = build_url({'mode': 'av_ace','url': channel, 'name': name})
@@ -263,7 +263,7 @@ elif mode[0]=='open_roja_stream':
     resolve_roja(url,name)
 
 elif mode[0]=='av_schedule':
-    arenavision_schedule()
+    arenavision_schedule(params['guide'][0])
 
 elif mode[0]=='av_open':
     channels=((params['channels'][0]).replace('[','').replace(']','').replace("'",'').replace('u','').replace(' ','')).split(',')

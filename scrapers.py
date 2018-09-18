@@ -255,12 +255,15 @@ def arenavision_channels():
     r = requests.get(url, headers = arenavision_headers())
     html = r.text
 
+    m = re.search('<a [^>]*href="/?([^"]+)"[^>]*>EVENTS GUIDE</a>', html)
+    guide = 'guide' if not m else m.group(1)
+
     channels = re.findall('<a[^>]+href..\/?([^"]+)"[^>]*>(ArenaVision [0-9]+)</a>', html)
 
-    return channels
+    return guide, channels
 
-def arenavision_schedule():
-    url = arenavision_url("guide")
+def arenavision_schedule(guide):
+    url = arenavision_url(guide)
     try:
         source = requests.get(url, headers = arenavision_headers()).text
     except:
