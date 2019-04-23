@@ -102,6 +102,10 @@ if mode is None:
     li = xbmcgui.ListItem('Torrent-tv.ru',iconImage='http://addons.tvaddons.ag/cache/images/bc591d6d5ec442d4ddb43a347a8be6_icon.png')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
+    url = build_url({'mode': 'allfon', 'url':'http://91.92.66.82/trash/ttv-list/allfon.all.player.m3u'})
+    li = xbmcgui.ListItem('Allfon',iconImage='https://i.imgur.com/1e3m2sf.png')
+    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
+                                listitem=li, isFolder=True)
 
     # url = build_url({'mode': 'soccer188'})
     # li = xbmcgui.ListItem('Soccer188',iconImage='')
@@ -135,6 +139,8 @@ elif mode[0]=='play_sopc':
 
 elif mode[0]=='ttv_sport':
     ttv_sport()
+elif mode[0]=='allfon':
+    allfon()
 elif mode[0]=='serbplus':
     serbplus()
 elif mode[0]=='play_serb':
@@ -209,12 +215,12 @@ elif mode[0]=='open_ttv_stream':
     open_ttv_stream(url,name)
 
 elif mode[0]=='av':
-    url = build_url({'mode': 'av_schedule'})
+    guide, channels = arenavision_channels()
+
+    url = build_url({'mode': 'av_schedule', 'guide': guide})
     li = xbmcgui.ListItem('[COLOR orange]Schedule / Agenda[/COLOR]',iconImage='https://pbs.twimg.com/profile_images/788852870993027072/giwZj-BU.jpg')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
-
-    channels = arenavision_channels()
 
     for channel, name in channels:
         url = build_url({'mode': 'av_ace','url': channel, 'name': name})
@@ -257,7 +263,7 @@ elif mode[0]=='open_roja_stream':
     resolve_roja(url,name)
 
 elif mode[0]=='av_schedule':
-    arenavision_schedule()
+    arenavision_schedule(params['guide'][0])
 
 elif mode[0]=='av_open':
     channels=((params['channels'][0]).replace('[','').replace(']','').replace("'",'').replace('u','').replace(' ','')).split(',')

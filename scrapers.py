@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 
 import re
@@ -94,7 +95,7 @@ def get_ttv():
     xbmcplugin.endOfDirectory(addon_handle)
 
 def ttv_sport():
-    base_url = 'http://pomoyka.lib.emergate.net/trash/ttv-list/ttv.sport.player.m3u'
+    base_url = 'http://91.92.66.82/trash/ttv-list/ttv.sport.player.m3u'
     source = read_url(base_url)
     if source:
         match= re.compile('#EXTINF:-1,(.+?)\n(.*)').findall(source)
@@ -110,13 +111,38 @@ def ttv_sport():
             li.setProperty('IsPlayable', 'true')
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
     xbmcplugin.endOfDirectory(addon_handle)
-def open_ttv_stream(url,name):
 
+def allfon():
+    base_url = 'http://91.92.66.82/trash/ttv-list/allfon.all.player.m3u'
+    source = urllib.urlopen(base_url)
+    linedsource = source.readlines()
+    if linedsource:
+        content = ""
+        for line in linedsource:
+            if not re.match('#EXTVLCOPT', line):
+                line = line.rstrip("\n")
+                content = content + '\n' + line
+        match = re.compile('#EXTINF:0,(.*?)\s\(allfon\)\n(.*)').findall(content)
+        for titulo,acestream in match:
+            name=titulo
+            ace=acestream
+            clean = re.compile("\((.+?)\)").findall(name)
+            for categorie in clean:
+                name = name.replace("(" + categorie +")","")
+                ace=acestream
+            url='plugin://program.plexus/?mode=1&url=%s&name=%s'%(ace,name.replace(' ','+'))
+            li = xbmcgui.ListItem('%s'%name, iconImage='https://i.imgur.com/1e3m2sf.png')
+            li.setProperty('IsPlayable', 'true')
+            xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
+    xbmcplugin.endOfDirectory(addon_handle)
+
+
+def open_ttv_stream(url,name):
     resolve_roja(url,name)
 
 
 def get_ttv_cat(cat,tag):
-    url="http://pomoyka.lib.emergate.net/trash/ttv-list/ttv.m3u"
+    url="http://91.92.66.82/trash/ttv-list/ttv.m3u"
     html=read_url(url)
     dicty=json.loads(tag)
     dicty = {k.encode('utf-8'): v for k, v in dicty.items()}
@@ -133,28 +159,28 @@ def get_ttv_cat(cat,tag):
 
 def ttv_cats():
     dict_torrent = {}
-    url="http://pomoyka.lib.emergate.net/trash/ttv-list/ttv.m3u"
+    url="http://91.92.66.82/trash/ttv-list/ttv.m3u"
     html_source=read_url(url)
     match = re.compile('#EXTINF:-1,(.+?)\n(.*)').findall(html_source)
     for title, acehash in match:
-            channel_name = re.compile('(.+?) \(').findall(title)
-            match_cat = re.compile('\((.+?)\)').findall(title)
-            for i in xrange(0,len(match_cat)):
-                if match_cat[i] == "Для взрослых" :
-                    pass
-                elif match_cat[i] == "Ночной канал" :
-                                pass
-                else:
-                        categorie = russiandictionary(match_cat[i])
+        channel_name = re.compile('(.+?) \(').findall(title)
+        match_cat = re.compile('\((.+?)\)').findall(title)
+        for i in xrange(0,len(match_cat)):
+            if match_cat[i] == "Для взрослых" :
+                pass
+            elif match_cat[i] == "Ночной канал" :
+                pass
+            else:
+                categorie = russiandictionary(match_cat[i])
 
-                        if categorie not in dict_torrent.keys():
-                            try:
-                                dict_torrent[categorie] = [(channel_name[0],acehash)]
-                            except: pass
-                        else:
-                            try:
-                                dict_torrent[categorie].append((channel_name[0],acehash))
-                            except: pass
+        if categorie not in dict_torrent.keys():
+            try:
+                dict_torrent[categorie] = [(channel_name[0],acehash)]
+            except: pass
+        else:
+            try:
+                dict_torrent[categorie].append((channel_name[0],acehash))
+            except: pass
     for cat in dict_torrent.keys():
         url = build_url({'mode': 'open_ttv_cat','channels':json.dumps(dict_torrent),'cat':cat})
         li = xbmcgui.ListItem(cat,iconImage='https://start.me/favicon/www.torrent-tv.ru')
@@ -231,12 +257,15 @@ def arenavision_channels():
     r = requests.get(url, headers = arenavision_headers())
     html = r.text
 
+    m = re.search('<a [^>]*href="/?([^"]+)"[^>]*>EVENTS GUIDE</a>', html)
+    guide = 'guide' if not m else m.group(1)
+
     channels = re.findall('<a[^>]+href..\/?([^"]+)"[^>]*>(ArenaVision [0-9]+)</a>', html)
 
-    return channels
+    return guide, channels
 
-def arenavision_schedule():
-    url = arenavision_url("guide")
+def arenavision_schedule(guide):
+    url = arenavision_url(guide)
     try:
         source = requests.get(url, headers = arenavision_headers()).text
     except:
