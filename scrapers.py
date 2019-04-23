@@ -200,7 +200,7 @@ def russiandictionary(string):
 def arenavision_url(query):
     # TODO auto find best mirror
     # mirrors: http:// arenavision.in arenavision2017.tk arenavision2017.ml arenavision2017.ga arenavision2017.cf
-    return "/".join(['http://arenavision.in', query])
+    return "/".join(['http://arenavision.us', query])
 
 def arenavision_headers():
     return {
@@ -209,11 +209,13 @@ def arenavision_headers():
 
 def play_arena(url,name):
     html = requests.get(url, headers = arenavision_headers()).text
-    match = re.compile('this.loadPlayer\("(.+?)"').findall(html)[0]
+    match = re.compile('this.loadPlayer\("(.+?)"').findall(html)
+    if not match:
+        match = re.compile('id:"([a-z0-9]{40})"').findall(html)
     try:
-        url='plugin://program.plexus/?mode=1&url=acestream://%s&name=%s'%(match,urllib.quote_plus(name))
+        url='plugin://program.plexus/?mode=1&url=acestream://%s&name=%s'%(match[0],urllib.quote_plus(name))
     except:
-        url='plugin://program.plexus/?mode=1&url=acestream://%s&name=%s'%(match,name.replace(' ','+'))
+        url='plugin://program.plexus/?mode=1&url=acestream://%s&name=%s'%(match[0],name.replace(' ','+'))
 
     xbmc.Player().play(url)
 
@@ -234,7 +236,7 @@ def arenavision_channels():
     return channels
 
 def arenavision_schedule():
-    url = arenavision_url("e-guide")
+    url = arenavision_url("guide")
     try:
         source = requests.get(url, headers = arenavision_headers()).text
     except:
