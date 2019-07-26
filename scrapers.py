@@ -225,12 +225,20 @@ def russiandictionary(string):
 
 def arenavision_url(query):
     # TODO auto find best mirror
-    # mirrors: http:// arenavision.in arenavision2017.tk arenavision2017.ml arenavision2017.ga arenavision2017.cf
-    return "/".join(['http://arenavision.us', query])
+    # mirrors: http:// arenavision.in arenavision2017.tk arenavision2017.ml arenavision2017.ga arenavision2017.cf arenavision.biz
+    return "/".join(['http://arenavision.biz', query])
 
 def arenavision_headers():
     return {
-        "Cookie" : "beget=begetok; has_js=1;"
+      'Connection': 'keep-alive',
+      'Pragma': 'no-cache',
+      'Cache-Control': 'no-cache',
+      'Upgrade-Insecure-Requests': '1',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
+      'Accept-Encoding': 'gzip, deflate',
+      'Accept-Language': 'es-ES,es;q=0.9,ca;q=0.8,en;q=0.7',
+      'Cookie' : 'beget=begetok; has_js=1;'
     }
 
 def play_arena(url,name):
@@ -238,6 +246,8 @@ def play_arena(url,name):
     match = re.compile('this.loadPlayer\("(.+?)"').findall(html)
     if not match:
         match = re.compile('id:"([a-z0-9]{40})"').findall(html)
+    if not match:
+        match = re.compile('acestream://([a-z0-9]{40})').findall(html)
     try:
         url='plugin://program.plexus/?mode=1&url=acestream://%s&name=%s'%(match[0],urllib.quote_plus(name))
     except:
